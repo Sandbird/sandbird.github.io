@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta name="twitter:title" content="Gapminder of Cases & Fully vaccinated percentages per Regional Unit">
+  <meta name="twitter:image:src" content="https://sandbird.github.io/dragit/img/img.png"/>
+  <meta name="twitter:domain" content="https://sandbird.github.io/dragit/">
+  <title>Gapminder of Cases & Fully vaccinated percentages per Regional Unit</title>
+  <meta name="description" content="Drag & Drop Prefectures in Cases/Vaccinations Gapminder chart">
+  <link href="src/dragit.css" rel="stylesheet"/>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="lib/jquery-3.3.1.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="lib/d3.v3.js"></script>
+  <script src="src/dragit.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
+</head>
+<title>Gapminder Κρουσμάτων & Ποσοστών εμβολιασμού ΠΕ</title>
+<style>
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-left:40px;
+  font-weight: 200;
+  font-size: 14px;
+}
+
+.container{
+  padding: 0;
+  margin: 0;
+}
+
+html,body {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+text {
+  cursor: default;
+}
+
+p {
+  margin:0;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 400;
+}
+
+#chart {
+  height: 506px;
+}
+
+text {
+  font-size: 10px;
+}
+
+.dot {
+  stroke: #000;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.label {
+  fill: #777;
+}
+
+.year.label {
+  font: 500 100px "Helvetica Neue";
+  fill: #ddd;
+}
+
+.country.label  {
+  font: 500 96px "Helvetica Neue";
+  fill: #ddd;
+}
+
+.countrysub.label  {
+  font: 500 32px "Helvetica Neue";
+  fill: #ddd;
+}
+
+.year.label.active {
+  fill: #aaa;
+}
+
+circle.pointTrajectory {
+   pointer-events: none;
+   stroke: lightgray;
+   fill: black;
+   opacity: 0;
+}
+
+path.lineTrajectory {
+  stroke-width: 2;
+  stroke-opacity: .5;
+  stroke: black;
+  fill: none;
+  pointer-events: none;
+}
+
+.selected {
+  stroke-width: 4;
+}
+
+
+.ui-widget-content {
+	border: 1px solid #bdc3c7;
+	background: #e1e1e1;
+	color: #222222;
+	margin-top: 4px;
+}
+
+.ui-slider .ui-slider-handle {
+	position: absolute;
+	z-index: 2;
+	width: 6.4em;
+	height: 2.2em;
+	cursor: default;
+	margin: 0 -40px auto !important;
+	text-align: center;	
+	line-height: 30px;
+	color: #FFFFFF;
+	font-size: 15px;
+}
+
+.ui-slider .ui-slider-handle .glyphicon {
+	color: #FFFFFF;
+	margin: 0 3px; 
+	font-size: 11px;
+	opacity: 0.5;
+}
+
+.ui-corner-all {
+	border-radius: 20px;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+	top: -.9em;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default {
+	border: 1px solid #f9f9f9;
+	background: #3498db;
+}
+
+.ui-slider-horizontal .ui-slider-handle {
+	margin-left: -0.5em;
+}
+
+.ui-slider .ui-slider-handle {
+	cursor: pointer;
+}
+
+.ui-state-hover, .ui-state-focus {
+    background:none;
+    border:none;
+}
+.ui-slider a,
+.ui-slider a:focus {
+	cursor: pointer;
+	outline: none;
+}
+
+.price-slider {
+  margin-left: 20px;
+  margin-right: 80px;
+	margin-top: 08px;
+}
+
+.price-slider span {
+	font-weight: 200;
+	display: inline-block;
+	color: #7f8c8d;
+	font-size: 13px;
+}
+
+.form-group {
+	margin-bottom: 0;
+}
+#play_button {
+  padding-top:20px;
+  text-align:center
+}
+
+input:focus, button:focus{
+ outline: none;
+}
+
+
+.label-ctrl{position:relative;z-index:800;pointer-events:visiblePainted;pointer-events:auto;margin-left:auto;margin-right:auto;}
+.label-ctrl{float:left;clear:both;}
+.label-ctrl{cursor:auto;}
+.info{position:absolute; margin:20px 990px; padding:6px 8px;font:12px/14px Arial, Helvetica, sans-serif;background:white;background:rgba(255,255,255,0.8);box-shadow:0 0 15px rgba(0,0,0,0.2);border-radius:5px;}
+.legend{text-align:left;color:#555;line-height: 18px;}
+.legend i{width:1.1em;height:1.1em;float:left;margin-right:8px;opacity:0.7;}
+</style>
+
+<h1>Gapminder Κρουσμάτων & Ποσοστών εμβολιασμού ΠΕ</h1>
+<p>Όπως προκύπτει από την τοποθεσία κάθε εμβολιαστικού κέντρου που μπορεί να περιλαμβάνει εργαζόμενους, μη μόνιμους κατοίκους της Περιφερειακής Ενότητας κ.ά.<br><br></p>
+<p><i>Τα χρώματα υποδεικνύουν την Περιφέρεια στην οποία υπάγεται η κάθε περιοχή</i></p>
+<p><i>Το μέγεθος των κύκλων επηρεάζεται από τον συνολικό αριθμό κρουσμάτων της περιοχής. (μεγαλύτερος κύκλος = περισσότερα κρούσματα στο σύνολο)</i></p>
+<p><i>Χρησιμοποιήστε το ποντίκι σας για να κάνετε κλικ και να σύρετε τις περιοχές (αντιπροσωπεύονται ως κύκλοι) για να δείτε την επιδημιολογική καμπύλη της περιοχής που θέλετε.</i></p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div id="chart" style="margin:0px"></div>
+      <div class="price-slider">
+        <div class="col-sm-12" style="width:950px">
+          <div id="slider" min="0" max="261" step="1" value="0" style="flex: 0 0 80%;"></div>
+          <div id="play_button"><button type="button" class="btn btn-xs btn-primary" id="pause">&#9658;</button></div>
+          <input type="hidden" id="sliderval" size="100">
+        </div>
+      </div>
+    </div>
+    <div class="info legend label-ctrl"></div>
+    </div>
+  </div>
+  <div class="row" style="padding-top:10px">
+      Original creation by <a target="_blank" href="http://www.gapminder.org/world/">Gapminder</a> using <a href="https://github.com/RandomEtc/mind-gapper-js">Tom Carden</a> JavaScript version.<br>
+      Recreation by <a target="_blank" href="http://bost.ocks.org/mike/nations/">Mike Bostock</a> with <a href="http://d3js.org/">D3.js</a>.<br>
+      Re-Recreation using <a target="_blank" href="http://romsson.github.io/dragit/">dragit.js</a> by <a href="http://romain.vuillemot.net/">Romain Vuillemot</a> (view <a href="https://github.com/romsson/dragit/blob/master/example/nations.html">source</a> on GitHub).<br>
+      Further adaptation by <a target="_blank" href="https://github.com/Sandbird/sandbird.github.io/tree/main/dragit">Sandbird</a>
+    </div>
+</div>
+<script>
+$( document ).ready(function() {
+let gData = null;
+// Various accessors that specify the four dimensions of data to visualize.
+function x(d) { return (d.vaccinated > 0 && d.vaccinated != null) ? d.vaccinated : 0.1; }
+function y(d) { return (d.weeklyCases > 0 && d.weeklyCases != null) ? d.weeklyCases : 0.1; }
+function radius(d) { return (d.population > 0 && d.population != null) ? d.population : 1; }
+function color(d) { return d.region; }
+function key(d) { return d.name; }
+
+
+// Chart dimensions.
+var margin = {top: 19.5, right: 19.5, bottom: 19.5, left: 39.5},
+    width = 960 - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+// Load the data.
+d3.json("data/prefectures.json", function(nations) {
+	var max_size = nations[0].vaxPercentage.length; 
+  var max_life = Math.max.apply(Math, nations[51].weeklyCases.map(function (i) {
+    return i[1];
+  })); //3040 - Mykonou - lazy way of doing it. Need to send the max value from the json
+  max_life = 1500;
+
+  var max_vaccinated = Math.max.apply(Math, nations[7].vaxPercentage.map(function (i) {
+     return i[1];
+  })); //4719597 - Attikis - lazy way of doing it. Need to send the max value from the json
+  max_vaccinated = Math.ceil(max_vaccinated/200)*200; //nearest 200
+  //max_vaccinated = Math.ceil(max_vaccinated/2000000)*2000000; //nearest 1.5mil (in case of doses instead of %)
+  
+  var max_ball = Math.max.apply(Math, nations[7].population.map(function (i) {
+    return i[0]+i[1];
+  })); //233479 - Attikis - lazy way of doing it. Need to send the max value from the json
+  max_ball = Math.ceil(max_ball/200000)*200000; //nearest 150000
+
+	var xScale = d3.scale.log().domain([0.1, max_vaccinated]).range([0, width]),
+	    yScale = d3.scale.linear().domain([0.1, max_life]).range([height, 0]),
+	    radiusScale = d3.scale.sqrt().domain([0.1, max_ball]).range([0.1, 40]),
+	    colorScale = d3.scale.category20();
+
+	// The x & y axes.
+	var xAxis = d3.svg.axis().orient("bottom").scale(xScale).ticks(10, d3.format(",d")),
+	    yAxis = d3.svg.axis().scale(yScale).orient("left");
+
+	// Create the SVG container and set the origin.
+	var svg = d3.select("#chart").append("svg")
+	    .attr("width", width + margin.left + margin.right)
+	    .attr("height", height + margin.top + margin.bottom)
+	  	.append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+	    .attr("class", "gRoot")
+
+	// Add the x-axis.
+	svg.append("g")
+	    .attr("class", "x axis")
+	    .attr("transform", "translate(0," + height + ")")
+	    .call(xAxis);
+
+	// Add the y-axis.
+	svg.append("g")
+	    .attr("class", "y axis")
+	    .call(yAxis);
+
+	// Add an x-axis label.
+	svg.append("text")
+	    .attr("class", "x label")
+	    .attr("text-anchor", "end")
+	    .attr("x", width)
+	    .attr("y", height - 6)
+	    .text("Ποσοστό ολοκλ. εμβολιασμών ΠΕ (μη μόνιμων κατ.)");
+
+	// Add a y-axis label.
+	svg.append("text")
+	    .attr("class", "y label")
+	    .attr("text-anchor", "end")
+	    .attr("y", 6)
+	    .attr("dy", ".75em")
+	    .attr("transform", "rotate(-90)")
+	    .text("Κρούσματα 7ημέρου ανά 100K κατοίκους");
+
+	// Add the year label; the value is set on transition.
+	var label = svg.append("text")
+	    .attr("class", "year label")
+	    .attr("text-anchor", "end")
+	    .attr("y", height - 24)
+	    .attr("x", width)
+	    .text('');
+
+	// Add the country label; the value is set on transition.
+	var countrylabel = svg.append("text")
+	    .attr("class", "country label")
+	    .attr("text-anchor", "start")
+	    .attr("y", 80)
+	    .attr("x", 20)
+	    .text(" ");
+	// Add the country sub label; the value is set on transition.
+	var countrySublabel = svg.append("text")
+	    .attr("class", "countrysub label")
+	    .attr("text-anchor", "start")
+	    .attr("y", 125)
+	    .attr("x", 20)
+	    .text(" ");
+
+	var first_time = false;
+
+
+  // A bisector since many nation's data is sparsely-defined.
+  var bisect = d3.bisector(function(d) { return d[0]; });
+
+  // Add a dot per nation. Initialize the data at 1800, and set the colors.
+  var dot = svg.append("g")
+      .attr("class", "dots")
+    	.selectAll(".dot")
+      .data(interpolateData(1800))
+    	.enter().append("circle")
+      .attr("class", "dot")
+      .style("fill", function(d) { return colorScale(color(d)); })
+      .call(position)
+      .on("mousedow", function(d, i) {
+
+      })
+      .on("mouseup", function(d, i) {
+        dot.classed("selected", false);
+        d3.select(this).classed("selected", !d3.select(this).classed("selected"));
+        dragit.trajectory.display(d, i, "selected");
+
+        //TODO: test if has been dragged
+        // Look at the state machine history and find a drag event in it?
+
+      })
+      .on("mouseenter", function(d, i) {
+        clear_demo();
+        if(dragit.statemachine.current_state == "idle") {
+          dragit.trajectory.display(d, i)
+          dragit.utils.animateTrajectory(dragit.trajectory.display(d, i), dragit.time.current, 1000)
+          countrylabel.text(d.name);
+          countrySublabel.text("Κρ: "+d.weeklyCases+", Εμβ: "+ d.vaccinated +"%");
+          dot.style("opacity", .4)
+          d3.select(this).style("opacity", 1)
+          d3.selectAll(".selected").style("opacity", 1)
+        }
+      })
+      .on("mouseleave", function(d, i) {
+        if(dragit.statemachine.current_state == "idle") {
+          countrylabel.text("");
+          countrySublabel.text("");
+          dot.style("opacity", 1);
+        }  
+        dragit.trajectory.remove(d, i);
+      })
+      .call(dragit.object.activate)
+
+  // Add a title.
+  dot.append("title")
+      .text(function(d) { return d.name; });
+
+  // Start a transition that interpolates the data based on year.
+  svg.transition()
+      .duration(30000)
+      .ease("linear")
+
+  // Positions the dots based on data.
+  function position(dot) {
+    dot.attr("cx", function(d) { var cx = x(d); return xScale(x(d)); })
+       .attr("cy", function(d) { var cy = y(d); return yScale(y(d)); })
+       .attr("r", function(d)  { var r =  radius(d);  return radiusScale(radius(d)); });
+  }
+
+  // Defines a sort order so that the smallest dots are drawn on top.
+  function order(a, b) {
+    return radius(b) - radius(a);
+  }
+  
+	 // Updates the display to show the specified year.
+  function displayYear(year) {
+    dot.data(interpolateData(year+dragit.time.min), key).call(position).sort(order);
+    var cat = (new Date(nations[6].date[year]).toDateString().split(' ').slice(1).join(' ')).split(' ');
+    //label.text(cat[0] + "-" +cat[1]);
+
+    updateSlider(1,cat[0] + "-" +cat[1]);
+  }
+
+  // Interpolates the dataset for the given (fractional) year.
+  function interpolateData(year) {
+    return nations.map(function(d) {
+      return {
+        name: d.name,
+        region: d.region,
+        vaccinated: interpolateValues(d.vaxPercentage, year),
+        population: interpolateValues(d.population, year),
+        weeklyCases: interpolateValues(d.weeklyCases, year)
+      };
+    });
+  }
+
+  // Finds (and possibly interpolates) the value for the specified year.
+  function interpolateValues(values, year) {
+    var i = bisect.left(values, year, 0, values.length - 1),
+        a = values[i];
+    if (i > 0) {
+      var b = values[i - 1],
+          t = (year - a[0]) / (b[0] - a[0]);
+      return a[1] * (1 - t) + b[1] * t;
+    }
+    return (a[1] < 0) ? 0 : a[1];
+  }
+  
+
+  init();
+
+function update(v, duration) {
+  dragit.time.current = v || dragit.time.current;
+  displayYear(dragit.time.current)
+  //Update slider
+  if(dragit.time.current != ""){
+    $("#slider").slider("value", dragit.time.current);
+  }
+}
+
+function updateSlider(slider,val) {
+  //changed. Now, directly take value from ui.value. if not set (initial, will use current value.)
+  var $amount =  val;
+  $('#slider a').html('<label><span class="glyphicon glyphicon-chevron-left"></span> '+$amount+' <span class="glyphicon glyphicon-chevron-right"></span></label>');
+}
+
+function init() {
+	var max_size = nations[0].vaxPercentage.length;
+	var max_val = nations[0].vaxPercentage[max_size-1][0];  //2061
+		
+  dragit.init(".gRoot");
+  dragit.time = {min:1800, max:max_val, step:1, current:1}
+  dragit.data = d3.range(nations.length).map(function() { return Array(); })
+
+  for(var yy = 1800; yy<=max_val; yy++) {
+    interpolateData(yy).filter(function(d, i) { 
+      dragit.data[i][yy-dragit.time.min] = [xScale(x(d)), yScale(y(d))];
+    })
+  }
+
+  //Create categories div. Region and color index
+  var test = nations.map(function(d) {
+    return {
+      region: d.region,
+      color: colorScale(color(d))
+    };
+  });    
+  const regions = [];
+  const map = new Map();
+  for (const item of test) {
+      if(!map.has(item.region)){
+          map.set(item.region, true);
+          if(item.region){
+            regions.push({
+              region: item.region,
+              color: item.color
+            });
+          }
+      }
+  }
+  regions.forEach(element => {
+    $('.legend').append('<div style="white-space: nowrap;overflow: hidden;"><i style="background:'+element.color+'"></i> '+element.region+'</div>');
+  });
+
+  $("#slider").slider({
+                animate: true,
+                value:1,
+                min: 1,
+                max: max_size-1,
+                step: 1,
+                slide: function(event, ui) {
+                  update(parseInt(ui.value), 200);
+                },
+                create: function(event, ui){
+                  $(this).slider('value', 1);
+                  displayYear(1);
+                }
+    });
+
+  dragit.evt.register("update", update);
+    
+  //Set the slider to the beginning
+  var pausebool = false;
+  var intv;
+  var	$pause = $("#pause");
+  $pause.on("click", function() {
+    pausebool = (pausebool) ? false : true;
+    if (pausebool == false) {
+      clearInterval(intv);
+      $pause.html("&#9658;");  //$pause.html("Play");
+    }else{
+      $pause.html("&#9646;");  //$pause.html("Pause");
+      intv = setInterval(function() {
+        var cv = dragit.time.current;
+        var nextValue = (parseInt(cv) + 1);
+        if(nextValue <= (max_size-1)){
+          $("#slider").slider("value", nextValue);
+          update(parseInt(nextValue), 200);
+          clear_demo();
+        }else{
+          clearInterval(intv);
+        }
+      }, 200);
+    }
+  });  
+
+  var end_effect = function() {
+    countrylabel.text("");
+    countrySublabel.text("");
+    dot.style("opacity", 1)
+  }
+  dragit.evt.register("dragend", end_effect)
+}
+
+function clear_demo() {
+  if(first_time) {
+     svg.transition().duration(0);
+    first_time = false;
+    window.clearInterval(demo_interval);
+    countrylabel.text("");
+    countrySublabel.text("");
+    dragit.trajectory.removeAll();
+    d3.selectAll(".dot").style("opacity", 1)
+  }
+}
+
+function play_demo() {
+
+  var ex_nations = ["\u03a7\u03af\u03bf\u03c5", "\u03a0\u03b9\u03b5\u03c1\u03af\u03b1\u03c2"]
+  var index_random_nation = null;
+  var random_index = Math.floor(Math.random() * ex_nations.length);
+  var random_nation = nations.filter(function(d, i) { 
+    if(d.name == ex_nations[random_index]) {
+      index_random_nation = i;
+      return true;
+    }
+  })[0];
+
+  var random_nation = nations[index_random_nation];
+
+  dragit.trajectory.removeAll();
+  dragit.trajectory.display(random_nation, index_random_nation);
+  countrylabel.text(random_nation.name);
+
+  dragit.utils.animateTrajectory(dragit.lineTrajectory, dragit.time.min, 2000)
+
+  d3.selectAll(".dot").style("opacity", .4)
+
+  d3.selectAll(".dot").filter(function(d) {
+    return d.name == random_nation.name;
+  }).style("opacity", 1)
+}
+
+var demo_interval = null;
+
+setTimeout(function() {
+  if(first_time) {
+    play_demo()
+    demo_interval = setInterval(play_demo, 3000)
+  }
+}, 1000);
+
+});
+});
+</script>
+</body>
+</html>
