@@ -256,7 +256,7 @@ d3.json("data/prefectures.json", function(nations) {
   var max_life = Math.max.apply(Math, nations[51].weeklyCases.map(function (i) {
     return i[1];
   })); //3040 - Mykonou - lazy way of doing it. Need to send the max value from the json
-  max_life = 1500;
+  max_life = 4000;
 
   var max_vaccinated = Math.max.apply(Math, nations[7].vaxPercentage.map(function (i) {
      return i[1];
@@ -343,11 +343,11 @@ d3.json("data/prefectures.json", function(nations) {
   // A bisector since many nation's data is sparsely-defined.
   var bisect = d3.bisector(function(d) { return d[0]; });
 
-  // Add a dot per nation. Initialize the data at 4000, and set the colors.
+  // Add a dot per nation. Initialize the data at 1800, and set the colors.
   var dot = svg.append("g")
       .attr("class", "dots")
     	.selectAll(".dot")
-      .data(interpolateData(4000))
+      .data(interpolateData(1800))
     	.enter().append("circle")
       .attr("class", "dot")
       .style("fill", function(d) { return colorScale(color(d)); })
@@ -464,10 +464,10 @@ function init() {
 	var max_val = nations[0].vaxPercentage[max_size-1][0];  //2061
 		
   dragit.init(".gRoot");
-  dragit.time = {min:4000, max:max_val, step:1, current:1}
+  dragit.time = {min:1800, max:max_val, step:1, current:1}
   dragit.data = d3.range(nations.length).map(function() { return Array(); })
 
-  for(var yy = 4000; yy<=max_val; yy++) {
+  for(var yy = 1800; yy<=max_val; yy++) {
     interpolateData(yy).filter(function(d, i) { 
       dragit.data[i][yy-dragit.time.min] = [xScale(x(d)), yScale(y(d))];
     })
