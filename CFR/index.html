@@ -1,0 +1,169 @@
+
+
+<html>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+    <h2> Linear Regresion With Coeficient of determination</h2>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="//rawgithub.com/phpepe/highcharts-regression/master/highcharts-regression.js"> </script>
+    <script>
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
+            },
+            title: {
+                text: 'Case-fatality ratio'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Κρούσματα'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Θάνατοι'
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                backgroundColor: '#FFFFFF',
+                borderWidth: 1
+            },
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 3,
+                        lineColor: "#0000ff",
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: '#0000ff'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat : '<b>{point.l}</b><br>{point.z}<br>Κ:{point.x}, Θ:{point.y}'
+                    }
+                }
+            },
+            series: [
+            {
+                regression: true ,
+                regressionSettings: {
+                    type: 'linear',  //exponential
+                    color: 'rgba(40, 100, 255, .9)',
+                    name: "%eq | r2: %r2",
+                    decimalPlaces: 4
+                },
+                name: 'Περιφερειακές Ενότητες',
+                color: 'rgba(223, 83, 83, .5)',
+                data: [ 
+                        {x:1142705, l:'Αττικής',y:9039, z:0.79},
+                        {x:6704, l:'Φωκίδας',y:37, z:0.55},
+                        {x:55478, l:'Εύβοιας',y:385, z:0.69},
+                        {x:37908, l:'Φθιώτιδας',y:399, z:1.05},
+                        {x:32055, l:'Βοιωτίας',y:245, z:0.76},
+                        {x:4469, l:'Ευρυτανίας',y:34, z:0.76},
+                        {x:39123, l:'Ημαθίας',y:630, z:1.60},
+                        {x:29415, l:'Χαλκιδικής',y:334, z:1.35},
+                        {x:37494, l:'Πέλλας',y:788, z:2.10},
+                        {x:21856, l:'Κιλκίς',y:416, z:1.90},
+                        {x:41901, l:'Σερρών',y:805, z:1.92},
+                        {x:38039, l:'Πιερίας',y:687, z:1.80},
+                        {x:390621, l:'Θεσσαλονίκης',y:4912, z:1.25},
+                        {x:56007, l:'Χανίων',y:242, z:0.43},
+                        {x:30776, l:'Ρεθύμνου',y:93, z:0.32},
+                        {x:112755, l:'Ηρακλείου',y:425, z:0.37},
+                        {x:20475, l:'Λασιθίου',y:80, z:0.39},
+                        {x:26516, l:'Δράμας',y:477, z:1.79},
+                        {x:24302, l:'Ροδόπης',y:215, z:0.88},
+                        {x:35197, l:'Καβάλας',y:515, z:1.46},
+                        {x:41993, l:'Έβρου',y:362, z:0.86},
+                        {x:3372, l:'Θάσου',y:0, z:0},
+                        {x:26989, l:'Ξάνθης',y:322, z:1.93},
+                        {x:15280, l:'Άρτας',y:114, z:0.74},
+                        {x:14166, l:'Πρέβεζας',y:61, z:0.43},
+                        {x:50836, l:'Ιωαννίνων',y:284, z:0.55},
+                        {x:11170, l:'Θεσπρωτίας',y:47, z:0.42},
+                        {x:8092, l:'Κεφαλληνίας',y:21, z:0.25},
+                        {x:11103, l:'Ζακύνθου',y:44, z:0.39},
+                        {x:481, l:'Ιθάκης',y:0, z:0},
+                        {x:7846, l:'Λευκάδας',y:42, z:0.53},
+                        {x:32268, l:'Κέρκυρας',y:177, z:0.54},
+                        {x:221, l:'Άγιο Όρος',y:8, z:3.61},
+                        {x:8320, l:'Σάμου',y:36, z:0.43},
+                        {x:2697, l:'Ικαρίας',y:0, z:0},
+                        {x:4045, l:'Λήμνου',y:0, z:0},
+                        {x:26900, l:'Λέσβου',y:191, z:0.71},
+                        {x:14594, l:'Χίου',y:67, z:0.45},
+                        {x:43474, l:'Μεσσηνίας',y:252, z:0.57},
+                        {x:20478, l:'Λακωνίας',y:143, z:0.69},
+                        {x:26307, l:'Αργολίδας',y:143, z:0.54},
+                        {x:23007, l:'Αρκαδίας',y:174, z:0.75},
+                        {x:42518, l:'Κορινθίας',y:383, z:0.97},
+                        {x:2502, l:'Τήνου',y:0, z:0},
+                        {x:882, l:'Κέας-Κύθνου',y:0, z:0},
+                        {x:2151, l:'Άνδρου',y:0, z:0},
+                        {x:1825, l:'Μήλου',y:0, z:0},
+                        {x:6016, l:'Μυκόνου',y:0, z:0},
+                        {x:6885, l:'Νάξου',y:0, z:0},
+                        {x:5984, l:'Σύρου',y:0, z:0},
+                        {x:1374, l:'Καρπάθου-Κάσου',y:0, z:0},
+                        {x:4986, l:'Πάρου',y:0, z:0},
+                        {x:9101, l:'Καλύμνου',y:0, z:0},
+                        {x:7597, l:'Θήρας',y:0, z:0},
+                        {x:38071, l:'Ρόδου',y:0, z:0},
+                        {x:10830, l:'Κω',y:0, z:0},
+                        {x:56100, l:'Μαγνησίας',y:709, z:1.26},
+                        {x:28823, l:'Καρδίτσας',y:420, z:1.45},
+                        {x:36378, l:'Τρικάλων',y:372, z:1.02},
+                        {x:3235, l:'Σποράδων',y:0, z:0},
+                        {x:96799, l:'Λάρισας',y:950, z:0.98},
+                        {x:100288, l:'Αχαΐας',y:967, z:0.96},
+                        {x:33877, l:'Ηλείας',y:263, z:0.77},
+                        {x:53444, l:'Αιτωλοακαρνανίας',y:458, z:0.85},
+                        {x:7645, l:'Γρεβενών',y:110, z:1.43},
+                        {x:14757, l:'Φλώρινας',y:139, z:0.94},
+                        {x:14113, l:'Καστοριάς',y:134, z:0.94},
+                        {x:49623, l:'Κοζάνης',y:479, z:0.96}
+
+                    ]
+            }
+            ]
+        });
+    });    
+    </script>
+</body>
+</html>
