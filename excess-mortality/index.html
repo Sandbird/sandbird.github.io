@@ -19,13 +19,13 @@
     </div>    
     <div id="panel" class="label-bottom label-left floating-panel" style="display:none;">
         <div class="info legend label-ctrl">
-            <div style="white-space: nowrap;"><i style="background:#800026"></i> &gt;25</div>
-            <div style="white-space: nowrap;"><i style="background:#BD0026"></i> 15-25</div>
-            <div style="white-space: nowrap;"><i style="background:#E31A1C"></i> 10-15</div>
-            <div style="white-space: nowrap;"><i style="background:#FC4E2A"></i> 5-10</div>
-            <div style="white-space: nowrap;"><i style="background:#FD8D3C"></i> 0-5</div>
-            <div style="white-space: nowrap;"><i style="background:#f9ffa0"></i> &lt;0</div>
-            <div style="white-space: nowrap;"><i style="background:#cbffa0"></i> 0</div>
+            <div style="white-space: nowrap;"><i style="background:#800026"></i> &gt;25%</div>
+            <div style="white-space: nowrap;"><i style="background:#BD0026"></i> 15-25%</div>
+            <div style="white-space: nowrap;"><i style="background:#E31A1C"></i> 10-15%</div>
+            <div style="white-space: nowrap;"><i style="background:#FC4E2A"></i> 5-10%</div>
+            <div style="white-space: nowrap;"><i style="background:#FD8D3C"></i> 0-5%</div>
+            <div style="white-space: nowrap;"><i style="background:#f9ffa0"></i> &lt;0%</div>
+            <div style="white-space: nowrap;"><i style="background:#cbffa0"></i> 0%</div>
             <div style="white-space: nowrap;"><i style="background:#ccc"></i> No data</div>
         </div>
     </div>
@@ -150,7 +150,7 @@
                     function onEachFeature(feature, layer) {
                         $.each(csv, function (i, item) {
                             if (item.Nomos == feature.properties.NAME_GR) {
-                                var popupContent = '<p>' + feature.properties.NAME_GR + '<br>' + item[radio] + '</p>';
+                                var popupContent = '<p>' + feature.properties.NAME_GR + '<br>' + item[radio] + '%</p>';
                                 if (feature.properties && feature.properties.popupContent) {
                                     popupContent += feature.properties.popupContent;
                                 }
