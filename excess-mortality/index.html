@@ -87,7 +87,7 @@
                     $("#radio-group").show();
                     $("#panel").show();
                     if (!$('#radio_group').is(":checked")) {
-                        var first = $("input:radio[name=radio_group]:not(:disabled):first");
+                        var first = $("input:radio[name=radio_group]:not(:disabled):last");
                         first.prop('checked', true);
                         buildMap(first.val()); // Default select the first radio button
                     }
