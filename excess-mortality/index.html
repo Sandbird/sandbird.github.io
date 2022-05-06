@@ -14,10 +14,10 @@
 <body>
     <div class="wrapper">
         <div id="map"></div>
-        <div id="radio-group"></div>
+        <div id="radio-group" style="display:none;"></div>
         <!--<p>Υπερβάλλουσα Θνησιμότητα ανα Νομό</p>-->
     </div>    
-    <div class="label-bottom label-left floating-panel">
+    <div id="panel" class="label-bottom label-left floating-panel" style="display:none;">
         <div class="info legend label-ctrl">
             <div style="white-space: nowrap;"><i style="background:#800026"></i> &gt;25</div>
             <div style="white-space: nowrap;"><i style="background:#BD0026"></i> 15-25</div>
@@ -84,6 +84,8 @@
                         i++;
                     });
                     $("#radio-group").html(radioHTML);
+                    $("#radio-group").show();
+                    $("#panel").show();
                     if (!$('#radio_group').is(":checked")) {
                         var first = $("input:radio[name=radio_group]:not(:disabled):first");
                         first.prop('checked', true);
