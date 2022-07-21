@@ -1,0 +1,275 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <div id="container" style="min-width:800px; height:100%;width:100%;margin: 0px auto;"></div>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(function () {   
+
+var north = [
+{x:50, y:3.09, name:'Άγιο Όρος'},
+{x:126, y:4.72, name:'Ημαθίας'},
+{x:152, y:4.07, name:'Θεσσαλονίκης'},
+{x:132, y:6.77, name:'Κιλκίς'},
+{x:126, y:6.52, name:'Πέλλας'},
+{x:136, y:6.03, name:'Πιερίας'},
+{x:110, y:5.24, name:'Σερρών'},
+{x:108, y:3.37, name:'Χαλκιδικής'},
+]
+
+var east = [
+{x:119, y:5.88, name:'Δράμας'},
+{x:108, y:2.06, name:'Έβρου'},
+{x:109, y:4.25, name:'Καβάλας'},
+{x:107, y:1.53, name:'Λέσβου'},
+{x:36, y:0.17, name:'Λήμνου'},
+{x:100, y:3.23, name:'Ξάνθης'},
+{x:79, y:1.97, name:'Ροδόπης'},
+{x:55, y:0.91, name:'Χίου'},
+{x:36, y:0.1, name:'Άνδρου'},
+{x:38, y:0.48, name:'Σάμου'},
+]
+
+var west = [
+{x:80, y:1.63, name:'Αιτωλοακαρνανίας'},
+{x:56, y:0.82, name:'Άρτας'},
+{x:106, y:4.31, name:'Γρεβενών'},
+{x:75, y:0.71, name:'Ζακύνθου'},
+{x:82, y:0.73, name:'Θεσπρωτίας'},
+{x:96, y:1.04, name:'Ιωαννίνων'},
+{x:105, y:2.84, name:'Καστοριάς'},
+{x:104, y:1.07, name:'Κέρκυρας'},
+{x:41, y:0.3, name:'Κεφαλληνίας'},
+{x:145, y:2.67, name:'Κοζάνης'},
+{x:91, y:1.01, name:'Λευκάδας'},
+{x:65, y:0.85, name:'Πρέβεζας'},
+{x:124, y:3.32, name:'Φλώρινας'},
+]
+
+var central = [
+{x:106, y:1.8, name:'Αττικής'},
+{x:101, y:1.56, name:'Βοιωτίας'},
+{x:72, y:1.21, name:'Εύβοιας'},
+{x:88, y:1.34, name:'Ευρυτανίας'},
+{x:105, y:3.17, name:'Καρδίτσας'},
+{x:147, y:3.24, name:'Λάρισας'},
+{x:118, y:3.6, name:'Μαγνησίας'},
+{x:88, y:2.68, name:'Τρικάλων'},
+{x:81, y:1.95, name:'Φθιώτιδας'},
+{x:45, y:0.79, name:'Φωκίδας'},
+]
+
+var south = [
+{x:83, y:1.02, name:'Αργολίδας'},
+{x:85, y:1.34, name:'Αρκαδίας'},
+{x:113, y:1.89, name:'Αχαΐας'},
+{x:59, y:0.98, name:'Ηλείας'},
+{x:89, y:0.91, name:'Ηρακλείου'},
+{x:90, y:1.59, name:'Κορινθίας'},
+{x:66, y:0.76, name:'Λακωνίας'},
+{x:53, y:0.53, name:'Λασιθίου'},
+{x:79, y:0.96, name:'Μεσσηνίας'},
+{x:115, y:0.63, name:'Ρεθύμνου'},
+{x:90, y:0.68, name:'Χανίων'},
+]
+
+
+
+    var chart = new Highcharts.Chart({
+        chart: {
+            style: {
+            fontFamily: 'Arial, Helvetica, Clean, sans-serif'
+            },
+            renderTo: 'container',
+            defaultSeriesType:'scatter',
+            borderWidth:1,
+            borderColor:'#ccc',
+            marginLeft:90,
+            marginRight:90,
+            backgroundColor:'#eee',
+            plotBackgroundColor:'#fff',
+        },
+        exporting: {
+            buttons: {
+                contextButton: {
+                    menuItems: [
+                        'printChart',
+                        'separator',
+                        'downloadPNG',
+                        'downloadJPEG',
+                        'downloadPDF',
+                        'downloadSVG'
+                    ]
+                }
+            }
+        },
+        credits:{enabled:false},
+        title:{
+            text:'Covid-19 κρούσματα και θάνατοι ανά 1000 άτομα [<=2021]'
+        },
+        legend:{
+            enabled:true                                
+        },
+        tooltip: {
+            formatter: function() {
+                return '<b>'+ this.series.name +'</b><br/>'+ this.point.name +'</b><br/>'+
+                    'K:'+this.x +' Θ:'+ this.y;
+            }
+        },
+        plotOptions: {
+        scatter: {
+            dataLabels: {
+            format: "{point.name}",
+            enabled: true,
+            allowOverlap: true,
+            style: {
+                fontFamily: 'tahoma', 
+                fontSize: '12px',
+                fontWeight: 'none'
+            }
+            },
+            enableMouseTracking: true
+        },
+        series: {
+            shadow:false,
+        }
+        },
+        xAxis:{
+            title:{
+                text:'Κρούσματα ανά 1000'
+            },
+            min:0,
+            max:160,
+            tickInterval:10,
+            tickLength:0,
+            minorTickLength:0,
+            gridLineWidth:1,
+            showLastLabel:true,
+            showFirstLabel:false,
+            lineColor:'#ccc',
+            lineWidth:1                
+        },
+        yAxis:{
+            title:{
+                text:'Θάνατοι ανά 1000',
+                rotation:-90,
+                margin:25,
+            },
+            min:0,
+            max:7,
+            tickInterval:0.5,
+            tickLength:0,
+            minorTickLength:0,
+            lineColor:'#ccc',
+            lineWidth:1        
+        },
+        series: [{
+            name: 'North',
+            color: '#6d2463',
+            data: north
+        },
+        {
+            name: 'East',
+            color: '#30bfcc',
+            data: east
+        },
+        {
+            name: 'West',
+            color: '#ff9b42',
+            data: west
+        },
+        {
+            name: 'Central',
+            color: '#ee4266',
+            data: central
+        },
+        {
+            name: 'South',
+            color: '#f4442e',
+            data: south
+        }]
+    }, function(chart) { // on complete
+        
+            var width = chart.plotBox.width / 2.0;
+            var height = chart.plotBox.height / 2.0 + 1;
+                
+            chart.renderer.rect(chart.plotBox.x, chart.plotBox.y, width, height, 1)
+            .attr({
+                fill: '#ffd54f',
+                opacity: 0.1,
+                zIndex: 0
+            })
+            .add();
+            
+            chart.renderer.rect(chart.plotBox.x + width, chart.plotBox.y, width, height, 1)
+            .attr({
+                fill: '#ef5350',
+                opacity: 0.1,
+                zIndex: 0
+            })
+            .add();
+        
+            chart.renderer.rect(chart.plotBox.x + width,  chart.plotBox.y + height, width, height, 1)
+            .attr({
+                fill: '#29b6f6',
+                opacity: 0.1,
+                zIndex: 0
+            })
+            .add();    
+
+            chart.renderer.rect(chart.plotBox.x, chart.plotBox.y + height, width, height, 1)
+            .attr({
+                fill:'#66bb6a',
+                opacity: 0.1,
+                zIndex: 0
+            })
+            .add();
+        
+            
+            chart.renderer.text("Low cases high deaths", chart.plotBox.x+10, chart.plotBox.y+22)
+            .attr({zIndex: 5})
+            .css({fontSize: '12px', fontWeight: 'bold'})
+            .add();
+            chart.renderer.rect(chart.plotBox.x+5, chart.plotBox.y+5, 140, 25, 1)
+            .attr({ fill: '#f7ebc8', zIndex: 4 })
+            .add();
+
+            chart.renderer.text("High cases high deaths", chart.plotBox.width-52, chart.plotBox.y+22)
+            .attr({zIndex: 5})
+            .css({fontSize: '12px', fontWeight: 'bold'})
+            .add();
+            chart.renderer.rect(chart.plotBox.width-55, chart.plotBox.y+5, 140, 25, 1)
+            .attr({ fill: '#f7d7d7', zIndex: 4 })
+            .add();
+
+            chart.renderer.text("Low cases low deaths", chart.plotBox.x+12, chart.plotBox.height+35)
+            .attr({zIndex: 5})
+            .css({fontSize: '12px', fontWeight: 'bold'})
+            .add();
+            chart.renderer.rect(chart.plotBox.x+5, chart.plotBox.height+16, 140, 25, 1)
+            .attr({ fill: '#d9f7d9', zIndex: 4 })
+            .add();
+
+            chart.renderer.text("High cases low deaths", chart.plotBox.width-50, chart.plotBox.height+33)
+            .attr({zIndex: 5})
+            .css({fontSize: '12px', fontWeight: 'bold'})
+            .add();
+            chart.renderer.rect(chart.plotBox.width-55, chart.plotBox.height+16, 140, 25, 1)
+            .attr({ fill: '#cfeefc', zIndex: 4 })
+            .add();
+
+    });
+});    
+</script>
+</body>
+</html>
