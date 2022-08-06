@@ -1,274 +1,176 @@
+
+
 <html>
-<head>
+    <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title></title>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="robots" content="noindex, nofollow">
     <meta name="googlebot" content="noindex, nofollow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
-    <div id="container" style="min-width:800px; height:100%;width:100%;margin: 0px auto;"></div>
-
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
-<script src="https://code.highcharts.com/modules/export-data.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-$(function () {   
-
-    var north = [
-{x:21, y:1.18, name:'Ημαθίας'},
-{x:26, y:0.84, name:'Θεσσαλονίκης'},
-{x:25, y:2.44, name:'Κιλκίς'},
-{x:30, y:1.86, name:'Πέλλας'},
-{x:25, y:1.9, name:'Πιερίας'},
-{x:21, y:1.58, name:'Σερρών'},
-{x:17, y:1.08, name:'Χαλκιδικής'},
-]
-
-var east = [
-{x:29, y:1.89, name:'Δράμας'},
-{x:16, y:0.32, name:'Έβρου'},
-{x:17, y:1.14, name:'Καβάλας'},
-{x:19, y:0.39, name:'Λέσβου'},
-{x:3, y:0.17, name:'Λήμνου'},
-{x:19, y:0.72, name:'Ξάνθης'},
-{x:18, y:0.57, name:'Ροδόπης'},
-{x:7, y:0.15, name:'Χίου'},
-{x:0, y:0.1, name:'Άνδρου'},
-{x:5, y:0.03, name:'Σάμου'},
-]
-
-var west = [
-{x:4, y:0.22, name:'Αιτωλοακαρνανίας'},
-{x:3, y:0.11, name:'Άρτας'},
-{x:21, y:1.66, name:'Γρεβενών'},
-{x:2, y:0.04, name:'Ζακύνθου'},
-{x:2, y:0.13, name:'Θεσπρωτίας'},
-{x:8, y:0.1, name:'Ιωαννίνων'},
-{x:13, y:0.91, name:'Καστοριάς'},
-{x:4, y:0.05, name:'Κέρκυρας'},
-{x:16, y:0.63, name:'Κοζάνης'},
-{x:2, y:0.08, name:'Λευκάδας'},
-{x:3, y:0.17, name:'Πρέβεζας'},
-{x:21, y:1.12, name:'Φλώρινας'},
-]
-
-var central = [
-{x:9, y:0.2, name:'Αττικής'},
-{x:6, y:0.11, name:'Βοιωτίας'},
-{x:2, y:0.07, name:'Εύβοιας'},
-{x:12, y:0.19, name:'Ευρυτανίας'},
-{x:16, y:0.43, name:'Καρδίτσας'},
-{x:20, y:0.63, name:'Λάρισας'},
-{x:15, y:0.77, name:'Μαγνησίας'},
-{x:12, y:0.55, name:'Τρικάλων'},
-{x:4, y:0.19, name:'Φθιώτιδας'},
-{x:4, y:0.19, name:'Φωκίδας'},
-]
-
-var south = [
-{x:2, y:0.01, name:'Αργολίδας'},
-{x:3, y:0.14, name:'Αρκαδίας'},
-{x:4, y:0.1, name:'Αχαΐας'},
-{x:2, y:0.13, name:'Ηλείας'},
-{x:3, y:0.08, name:'Ηρακλείου'},
-{x:4, y:0.03, name:'Κορινθίας'},
-{x:2, y:0.02, name:'Λακωνίας'},
-{x:1, y:0.02, name:'Λασιθίου'},
-{x:4, y:0.07, name:'Μεσσηνίας'},
-{x:2, y:0.02, name:'Ρεθύμνου'},
-{x:4, y:0.02, name:'Χανίων'},
-]
-
-
-
-
-    var chart = new Highcharts.Chart({
-        chart: {
-            style: {
-            fontFamily: 'Arial, Helvetica, Clean, sans-serif'
+    </head>
+    <body>
+    <h2>CFR with Coefficient of determination (έτος 2020)</h2>
+    <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+    <small>Left click and drag to zoom</small>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="highcharts-regression/highcharts-regression.js"> </script>
+    <script>
+    $(function () {
+        $('#container').highcharts({
+            chart: {
+                type: 'scatter',
+                zoomType: 'xy'
             },
-            renderTo: 'container',
-            defaultSeriesType:'scatter',
-            borderWidth:1,
-            borderColor:'#ccc',
-            marginLeft:90,
-            marginRight:90,
-            backgroundColor:'#eee',
-            plotBackgroundColor:'#fff',
-        },
-        exporting: {
-            buttons: {
-                contextButton: {
-                    menuItems: [
-                        'printChart',
-                        'separator',
-                        'downloadPNG',
-                        'downloadJPEG',
-                        'downloadPDF',
-                        'downloadSVG'
-                    ]
+            title: {
+                text: 'Case fatality rate'
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                title: {
+                    enabled: true,
+                    text: 'Κρούσματα'
+                },
+                startOnTick: true,
+                endOnTick: true,
+                showLastLabel: true
+            },
+            yAxis: {
+                title: {
+                    text: 'Θάνατοι'
                 }
-            }
-        },
-        credits:{enabled:false},
-        title:{
-            text:'Covid-19 κρούσματα και θάνατοι ανά 1000 άτομα [2020]'
-        },
-        legend:{
-            enabled:true                                
-        },
-        tooltip: {
-            formatter: function() {
-                return '<b>'+ this.series.name +'</b><br/>'+ this.point.name +'</b><br/>'+
-                    'K:'+this.x +' Θ:'+ this.y;
-            }
-        },
-        plotOptions: {
-        scatter: {
-            dataLabels: {
-            format: "{point.name}",
-            enabled: true,
-            allowOverlap: true,
-            style: {
-                fontFamily: 'tahoma', 
-                fontSize: '12px',
-                fontWeight: 'none'
-            }
             },
-            enableMouseTracking: true
-        },
-        series: {
-            shadow:false,
-        }
-        },
-        xAxis:{
-            title:{
-                text:'Κρούσματα ανά 1000'
+            legend: {
+                layout: 'vertical',
+                align: 'left',
+                verticalAlign: 'top',
+                x: 100,
+                y: 70,
+                floating: true,
+                backgroundColor: '#FFFFFF',
+                borderWidth: 1
             },
-            min:0,
-            max:40,
-            tickInterval:10,
-            tickLength:0,
-            minorTickLength:0,
-            gridLineWidth:1,
-            showLastLabel:true,
-            showFirstLabel:false,
-            lineColor:'#ccc',
-            lineWidth:1                
-        },
-        yAxis:{
-            title:{
-                text:'Θάνατοι ανά 1000',
-                rotation:-90,
-                margin:25,
+            plotOptions: {
+                scatter: {
+                    marker: {
+                        radius: 3,
+                        lineColor: "#0000ff",
+                        states: {
+                            hover: {
+                                enabled: true,
+                                lineColor: '#0000ff'
+                            }
+                        }
+                    },
+                    states: {
+                        hover: {
+                            marker: {
+                                enabled: false
+                            }
+                        }
+                    },
+                    
+                    tooltip: {
+                        headerFormat: '',
+                        pointFormat : '<b>{point.l}</b><br>{point.z}<br>Κ:{point.x}, Θ:{point.y}'
+                    },
+                    dataLabels: { 
+                        enabled: true,
+                        inside: false,
+                        overflow: 'none',
+                        crop: true,
+                        shape: 'callout',
+                        backgroundColor:'rgba(255,255,255,0.8)',
+                        borderColor: 'rgba(223, 83, 83, .5)',
+                        color: 'rgba(51, 51, 51,0.75)',
+                        borderWidth: .5,
+                        borderRadius: 5,
+                        y: -18,
+                        style: {
+                        fontFamily: 'Helvetica, sans-serif',
+                        fontSize: '08px',
+                        fontWeight: 'normal',
+                        textShadow: 'none'
+                        },
+                        formatter: function() {
+                        return '<b>'+this.point.l+'</b>'
+                                +'<br/><strong>'+ this.point.z+'</strong>'
+                                +'<br/>Κ:'+ this.point.x+', Θ:'+ this.point.y+'';
+                        }
+                    }
+                }
             },
-            min:0,
-            max:3,
-            tickInterval:0.5,
-            tickLength:0,
-            minorTickLength:0,
-            lineColor:'#ccc',
-            lineWidth:1        
-        },
-        series: [{
-            name: 'North',
-            color: '#6d2463',
-            data: north
-        },
-        {
-            name: 'East',
-            color: '#30bfcc',
-            data: east
-        },
-        {
-            name: 'West',
-            color: '#ff9b42',
-            data: west
-        },
-        {
-            name: 'Central',
-            color: '#ee4266',
-            data: central
-        },
-        {
-            name: 'South',
-            color: '#f4442e',
-            data: south
-        }]
-    }, function(chart) { // on complete
-        
-            var width = chart.plotBox.width / 2.0;
-            var height = chart.plotBox.height / 2.0 + 1;
-                
-            chart.renderer.rect(chart.plotBox.x, chart.plotBox.y, width, height, 1)
-            .attr({
-                fill: '#ffd54f',
-                opacity: 0.1,
-                zIndex: 0
-            })
-            .add();
-            
-            chart.renderer.rect(chart.plotBox.x + width, chart.plotBox.y, width, height, 1)
-            .attr({
-                fill: '#ef5350',
-                opacity: 0.1,
-                zIndex: 0
-            })
-            .add();
-        
-            chart.renderer.rect(chart.plotBox.x + width,  chart.plotBox.y + height, width, height, 1)
-            .attr({
-                fill: '#29b6f6',
-                opacity: 0.1,
-                zIndex: 0
-            })
-            .add();    
-
-            chart.renderer.rect(chart.plotBox.x, chart.plotBox.y + height, width, height, 1)
-            .attr({
-                fill:'#66bb6a',
-                opacity: 0.1,
-                zIndex: 0
-            })
-            .add();
-        
-            
-            chart.renderer.text("Low cases high deaths", chart.plotBox.x+10, chart.plotBox.y+22)
-            .attr({zIndex: 5})
-            .css({fontSize: '12px', fontWeight: 'bold'})
-            .add();
-            chart.renderer.rect(chart.plotBox.x+5, chart.plotBox.y+5, 140, 25, 1)
-            .attr({ fill: '#f7ebc8', zIndex: 4 })
-            .add();
-
-            chart.renderer.text("High cases high deaths", chart.plotBox.width-52, chart.plotBox.y+22)
-            .attr({zIndex: 5})
-            .css({fontSize: '12px', fontWeight: 'bold'})
-            .add();
-            chart.renderer.rect(chart.plotBox.width-55, chart.plotBox.y+5, 140, 25, 1)
-            .attr({ fill: '#f7d7d7', zIndex: 4 })
-            .add();
-
-            chart.renderer.text("Low cases low deaths", chart.plotBox.x+12, chart.plotBox.height+35)
-            .attr({zIndex: 5})
-            .css({fontSize: '12px', fontWeight: 'bold'})
-            .add();
-            chart.renderer.rect(chart.plotBox.x+5, chart.plotBox.height+16, 140, 25, 1)
-            .attr({ fill: '#d9f7d9', zIndex: 4 })
-            .add();
-
-            chart.renderer.text("High cases low deaths", chart.plotBox.width-50, chart.plotBox.height+33)
-            .attr({zIndex: 5})
-            .css({fontSize: '12px', fontWeight: 'bold'})
-            .add();
-            chart.renderer.rect(chart.plotBox.width-55, chart.plotBox.height+16, 140, 25, 1)
-            .attr({ fill: '#cfeefc', zIndex: 4 })
-            .add();
-
-    });
-});    
-</script>
+            series: [
+            {
+                regression: true ,
+                regressionSettings: {
+                    type: 'linear',  //exponential
+                    color: 'rgba(40, 100, 255, .9)',
+                    name: "%eq | r2: %r2",
+                    decimalPlaces: 4
+                },
+                name: 'Περιφερειακές Ενότητες',
+                color: 'rgba(223, 83, 83, .5)',
+                data: [ 
+                {l:'Αιτωλοακαρνανίας', x:985, y:47, z:4.77},
+                {l:'Άνδρου', x:8, y:1, z:12.5},
+                {l:'Αργολίδας', x:277, y:1, z:0.36},
+                {l:'Αρκαδίας', x:345, y:13, z:3.76},
+                {l:'Άρτας', x:250, y:8, z:3.2},
+                {l:'Αττικής', x:35589, y:801, z:2.50},
+                {l:'Αχαΐας', x:1542, y:32, z:2.07},
+                {l:'Βοιωτίας', x:766, y:13, z:1.69},
+                {l:'Γρεβενών', x:669, y:53, z:7.92},
+                {l:'Δράμας', x:2944, y:186, z:6.31},
+                {l:'Έβρου', x:2398, y:48, z:2.00},
+                {l:'Εύβοιας', x:465, y:15, z:3.22},
+                {l:'Ευρυτανίας', x:259, y:4, z:1.54},
+                {l:'Ζακύνθου', x:86, y:2, z:2.35},
+                {l:'Ηλείας', x:421, y:21, z:4.98},
+                {l:'Ημαθίας', x:2990, y:166, z:5.18},
+                {l:'Ηρακλείου', x:1205, y:26, z:2.15},
+                {l:'Θεσπρωτίας', x:126, y:6, z:4.76},
+                {l:'Θεσσαλονίκης', x:29918, y:934, z:3.12},
+                {l:'Ιωαννίνων', x:1458, y:17, z:1.65},
+                {l:'Καβάλας', x:2228, y:143, z:6.41},
+                {l:'Καρδίτσας', x:1900, y:49, z:2.57},
+                {l:'Καστοριάς', x:703, y:46, z:6.54},
+                {l:'Κέρκυρας', x:482, y:6, z:1.24},
+                {l:'Κιλκίς', x:2015, y:197, z:9.77},
+                {l:'Κοζάνης', x:2541, y:95, z:3.78},
+                {l:'Κορινθίας', x:664, y:5, z:0.75},
+                {l:'Λακωνίας', x:204, y:2, z:0.98},
+                {l:'Λάρισας', x:5933, y:181, z:3.05},
+                {l:'Λασιθίου', x:106, y:2, z:1.88},
+                {l:'Λέσβου', x:1689, y:34, z:2.01},
+                {l:'Λευκάδας', x:49, y:2, z:4.08},
+                {l:'Λήμνου', x:58, y:3, z:5.17},
+                {l:'Μαγνησίας', x:2872, y:147, z:5.11},
+                {l:'Μεσσηνίας', x:675, y:12, z:1.77},
+                {l:'Ξάνθης', x:2179, y:81, z:3.71},
+                {l:'Πέλλας', x:4216, y:261, z:6.19},
+                {l:'Πιερίας', x:3241, y:241, z:7.43},
+                {l:'Πρέβεζας', x:194, y:10, z:5.14},
+                {l:'Ρεθύμνου', x:228, y:2, z:0.87},
+                {l:'Ροδόπης', x:2043, y:64, z:3.12},
+                {l:'Σάμου', x:171, y:1, z:0.58},
+                {l:'Σερρών', x:3739, y:279, z:7.46},
+                {l:'Τρικάλων', x:1615, y:73, z:4.52},
+                {l:'Φθιώτιδας', x:773, y:31, z:4.01},
+                {l:'Φλώρινας', x:1101, y:58, z:5.26},
+                {l:'Φωκίδας', x:184, y:8, z:4.37},
+                {l:'Χαλκιδικής', x:1821, y:115, z:6.31},
+                {l:'Χανίων', x:650, y:4, z:0.61},
+                {l:'Χίου', x:373, y:8, z:2.14},
+                    ]
+            }
+            ]
+        });
+    });    
+    </script>
 </body>
 </html>
