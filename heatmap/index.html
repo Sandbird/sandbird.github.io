@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.2.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+  <style>
+    html {
+        display: flex;
+        justify-content: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="cases"></div>
+  <br><br>
+  <div id="icu"></div>
+  <br><br>
+  <div id="deaths"></div>
+  <script>
+    const spec1 = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize": {"contains": "padding", "type": "fit", "resize": true},
+      "width": 800,
+      "height": 360,
+      "title": {
+        "text": "2022 Cases by Age group",
+        "anchor": "middle",
+        "fontSize": 16,
+        "frame": "group",
+        "offset": 4
+      },
+      "padding": {"left": 15, "right": 60, "bottom": 5},
+      "data": {
+        "url": "data/demography_weekly.csv",
+        "format": {"type": "csv", "parse": {"date": "date"}}
+      },
+      "transform": [
+        {"calculate": "month(datum.date)", "as": "cvDate"},
+        {"calculate": "datum.date", "as": "Date"},
+        {"calculate": "datum.cases", "as": "Cases"},
+        /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
+        {"calculate": "datum.category", "as": "Age groups"},
+        {
+          "calculate": "datum.category == '<5' ? 0 : datum.category == '5-9' ? 1 : datum.category == '10-19' ? 2 : datum.category == '20-29' ? 3 : datum.category == '30-39' ? 4 : datum.category == '40-49' ? 5 : datum.category == '50-59' ? 6 : datum.category == '60-69' ? 7 : datum.category == '70-79' ? 8 : 9",
+          "as": "orderRank"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "Age groups",
+          "type": "ordinal",
+          "sort": {"field": "orderRank", "order": "descending"}
+        },
+        "x": {
+          "field": "Date", 
+          "type": "ordinal", 
+          "timeUnit": "week", 
+          "sort": null
+        },
+      },
+      "layer": [
+        {
+          "mark": {"type": "rect", "tooltip": true},
+          "encoding": {
+            "fill": {
+              "field": "Cases",
+              "type": "quantitative",
+              "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
+              /* "aggregate": "mean" */
+            }
+          },
+          
+        }
+      ],
+      "config": {}
+    };
+    const spec2 = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize": {"contains": "padding", "type": "fit", "resize": true},
+      "width": 800,
+      "height": 360,
+      "title": {
+        "text": "2022 Deaths by Age group",
+        "anchor": "middle",
+        "fontSize": 16,
+        "frame": "group",
+        "offset": 4
+      },
+      "padding": {"left": 15, "right": 60, "bottom": 5},
+      "data": {
+        "url": "data/demography_weekly.csv",
+        "format": {"type": "csv", "parse": {"date": "date"}}
+      },
+      "transform": [
+        {"calculate": "month(datum.date)", "as": "cvDate"},
+        {"calculate": "datum.date", "as": "Date"},
+        {"calculate": "datum.deaths", "as": "Deaths"},
+        /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
+        {"calculate": "datum.category", "as": "Age groups"},
+        {
+          "calculate": "datum.category == '<5' ? 0 : datum.category == '5-9' ? 1 : datum.category == '10-19' ? 2 : datum.category == '20-29' ? 3 : datum.category == '30-39' ? 4 : datum.category == '40-49' ? 5 : datum.category == '50-59' ? 6 : datum.category == '60-69' ? 7 : datum.category == '70-79' ? 8 : 9",
+          "as": "orderRank"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "Age groups",
+          "type": "ordinal",
+          "sort": {"field": "orderRank", "order": "descending"}
+        },
+        "x": {
+          "field": "Date", 
+          "type": "ordinal", 
+          "timeUnit": "week", 
+          "sort": null
+        },
+      },
+      "layer": [
+        {
+          "mark": {"type": "rect", "tooltip": true},
+          "encoding": {
+            "fill": {
+              "field": "Deaths",
+              "type": "quantitative",
+              "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
+              /* "aggregate": "mean" */
+            }
+          },
+          
+        }
+      ],
+      "config": {}
+    };
+    const spec3 = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "autosize": {"contains": "padding", "type": "fit", "resize": true},
+      "width": 800,
+      "height": 360,
+      "title": {
+        "text": "2022 ICU by Age group",
+        "anchor": "middle",
+        "fontSize": 16,
+        "frame": "group",
+        "offset": 4
+      },
+      "padding": {"left": 15, "right": 60, "bottom": 5},
+      "data": {
+        "url": "data/demography_weekly.csv",
+        "format": {"type": "csv", "parse": {"date": "date"}}
+      },
+      "transform": [
+        {"calculate": "month(datum.date)", "as": "cvDate"},
+        {"calculate": "datum.date", "as": "Date"},
+        {"calculate": "datum.intensive", "as": "ICU"},
+        /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
+        {"calculate": "datum.category", "as": "Age groups"},
+        {
+          "calculate": "datum.category == '<5' ? 0 : datum.category == '5-9' ? 1 : datum.category == '10-19' ? 2 : datum.category == '20-29' ? 3 : datum.category == '30-39' ? 4 : datum.category == '40-49' ? 5 : datum.category == '50-59' ? 6 : datum.category == '60-69' ? 7 : datum.category == '70-79' ? 8 : 9",
+          "as": "orderRank"
+        }
+      ],
+      "encoding": {
+        "y": {
+          "field": "Age groups",
+          "type": "ordinal",
+          "sort": {"field": "orderRank", "order": "descending"}
+        },
+        "x": {
+          "field": "Date", 
+          "type": "ordinal", 
+          "timeUnit": "week", 
+          "sort": null
+        },
+      },
+      "layer": [
+        {
+          "mark": {"type": "rect", "tooltip": true},
+          "encoding": {
+            "fill": {
+              "field": "ICU",
+              "type": "quantitative",
+              "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
+              /* "aggregate": "mean" */
+            }
+          },
+          
+        }
+      ],
+      "config": {}
+    };
+    vegaEmbed("#cases", spec1, {mode: "vega-lite", "actions":{"export": true, "source": false, "compiled": false, "editor": false}}).then().catch(console.warn);
+    vegaEmbed("#icu", spec3, {mode: "vega-lite", "actions":{"export": true, "source": false, "compiled": false, "editor": false}}).then().catch(console.warn);
+    vegaEmbed("#deaths", spec2, {mode: "vega-lite", "actions":{"export": true, "source": false, "compiled": false, "editor": false}}).then().catch(console.warn);
+  </script>
+</body>
+</html>
