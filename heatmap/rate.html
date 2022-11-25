@@ -24,7 +24,7 @@
       "width": 800,
       "height": 360,
       "title": {
-        "text": "Cases by Age group [2022]",
+        "text": "Cases per 100,000 people [2022]",
         "anchor": "middle",
         "fontSize": 16,
         "frame": "group",
@@ -38,7 +38,7 @@
       "transform": [
         {"calculate": "month(datum.date)", "as": "cvDate"},
         {"calculate": "datum.date", "as": "Date"},
-        {"calculate": "datum.cases", "as": "Cases"},
+        {"calculate": "datum.cases_rate", "as": "Cases per 100k"},
         /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
         {"calculate": "datum.category", "as": "Age groups"},
         {
@@ -61,7 +61,7 @@
         "tooltip": [
             {"field": "Age groups", "type": "ordinal"},
             {"field": "Date", "type": "ordinal", "timeUnit": "utcmonthdate"},
-            {"field": "Cases", "type": "quantitative"}
+            {"field": "Cases per 100k", "type": "quantitative"}
         ]
       },
       "layer": [
@@ -69,7 +69,7 @@
           "mark": {"type": "rect"},
           "encoding": {
             "fill": {
-              "field": "Cases",
+              "field": "Cases per 100k",
               "type": "quantitative",
               "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
               /* "aggregate": "mean" */
@@ -85,7 +85,7 @@
       "width": 800,
       "height": 360,
       "title": {
-        "text": "Intubated by Age group [2022]",
+        "text": "Intubated per 100,000 people [2022]",
         "anchor": "middle",
         "fontSize": 16,
         "frame": "group",
@@ -99,7 +99,7 @@
       "transform": [
         {"calculate": "month(datum.date)", "as": "cvDate"},
         {"calculate": "datum.date", "as": "Date"},
-        {"calculate": "datum.intensive", "as": "Intubated"},
+        {"calculate": "datum.icu_rate", "as": "Intubated  per 100k"},
         /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
         {"calculate": "datum.category", "as": "Age groups"},
         {
@@ -122,7 +122,7 @@
         "tooltip": [
             {"field": "Age groups", "type": "ordinal"},
             {"field": "Date", "type": "ordinal", "timeUnit": "utcmonthdate"},
-            {"field": "Intubated", "type": "quantitative"}
+            {"field": "Intubated  per 100k", "type": "quantitative", "title": "Int.  per 100k"}
         ]
       },
       "layer": [
@@ -130,7 +130,8 @@
           "mark": {"type": "rect"},
           "encoding": {
             "fill": {
-              "field": "Intubated",
+              "title": "Int.  per 100k",  
+              "field": "Intubated  per 100k",
               "type": "quantitative",
               "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
               /* "aggregate": "mean" */
@@ -147,7 +148,7 @@
       "width": 800,
       "height": 360,
       "title": {
-        "text": "Deaths by Age group [2022]",
+        "text": "Deaths per 100,000 people [2022]",
         "anchor": "middle",
         "fontSize": 16,
         "frame": "group",
@@ -161,7 +162,7 @@
       "transform": [
         {"calculate": "month(datum.date)", "as": "cvDate"},
         {"calculate": "datum.date", "as": "Date"},
-        {"calculate": "datum.deaths", "as": "Deaths"},
+        {"calculate": "datum.deaths_rate", "as": "Deaths per 100k"},
         /* {"calculate": "utchours(datum.date)", "as": "hoursDate"}, */
         {"calculate": "datum.category", "as": "Age groups"},
         {
@@ -184,15 +185,15 @@
         "tooltip": [
             {"field": "Age groups", "type": "ordinal"},
             {"field": "Date", "type": "ordinal", "timeUnit": "utcmonthdate"},
-            {"field": "Deaths", "type": "quantitative"}
+            {"field": "Deaths per 100k", "type": "quantitative"}
         ]
       },
       "layer": [
         {
-          "mark": {"type": "rect"},
+          "mark": {"type": "rect", "tooltip": true},
           "encoding": {
             "fill": {
-              "field": "Deaths",
+              "field": "Deaths per 100k",
               "type": "quantitative",
               "scale": {"scheme": "RedYellowBlue", "reverse": true},   //RedYellowBlue, DarkBlue
               /* "aggregate": "mean" */
@@ -206,7 +207,7 @@
     var opts = {mode: "vega-lite", "actions":{"export": true, "source": false, "compiled": false, "editor": false}};
     vegaEmbed("#cases", spec1, opts).then().catch(console.warn);
     vegaEmbed("#icu", spec2, opts).then().catch(console.warn);
-    vegaEmbed("#deaths", spec3, opts).then().catch(console.warn);;
+    vegaEmbed("#deaths", spec3, opts).then().catch(console.warn);
   </script>
 </body>
 </html>
